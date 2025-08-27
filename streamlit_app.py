@@ -147,7 +147,7 @@ if "total_reviews" not in st.session_state:
     st.session_state.negative = 0
 if "csv_results" not in st.session_state:
     st.session_state.csv_results = None
-# NEW: Initialize session state for preserving inputs and results
+# Initialize session state for preserving inputs and results
 if "user_text_input" not in st.session_state:
     st.session_state.user_text_input = ""
 if "last_prediction" not in st.session_state:
@@ -161,10 +161,10 @@ if "csv_analysis_done" not in st.session_state:
 
 # ---- Sidebar Navigation ----
 st.sidebar.title("📊 Navigation")
-page = st.sidebar.selectbox("Choose a page:", ["🔮 Review Prediction", "📁 CSV Analysis"])
+page = st.sidebar.selectbox("Choose a page:", ["✍️ Review Prediction", "📁 CSV Analysis"])
 
 # ---- Review Prediction Page ----
-if page == "🔮 Review Prediction":
+if page == "✍️ Review Prediction":
     st.title("🍟 McDonald's Review Sentiment Classifier")
     st.write("Here's a demo of how the model classifies reviews into **Positive** or **Negative**.")
 
@@ -218,11 +218,7 @@ if page == "🔮 Review Prediction":
 
     # Text input - MODIFIED: Use session state to preserve input
     st.write("Now try typing your own review below to see the prediction in action!")
-    user_text = st.text_area("✍️ Type a review here:", 
-                            value=st.session_state.user_text_input,
-                            height=160, 
-                            placeholder="e.g., The fries were crispy and the staff were super friendly!",
-                            key="review_text_area")
+    user_text = st.text_area("✍️ Type a review here:", value=st.session_state.user_text_input, height=160, placeholder="e.g., The fries were crispy and the staff were super friendly!", key="review_text_area")
     
     # Update session state when text changes
     st.session_state.user_text_input = user_text
@@ -231,7 +227,7 @@ if page == "🔮 Review Prediction":
     with col1:
         predict_btn = st.button("🔮 Predict")
     
-    # MODIFIED: Show last prediction if it exists and no new prediction is being made
+    # Show last prediction if it exists and no new prediction is being made
     if predict_btn:
         if not user_text.strip():
             st.warning("Please enter a review first.")
@@ -277,7 +273,7 @@ elif page == "📁 CSV Analysis":
     
     uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
     
-    # NEW: Check if this is a new file or returning to previous results
+    # Check if this is a new file or returning to previous results
     if uploaded_file is not None:
         current_file_name = uploaded_file.name
         
@@ -416,27 +412,14 @@ elif page == "📁 CSV Analysis":
                 
                 fig_pie = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.4)])
                 fig_pie.update_traces(marker=dict(colors=colors, line=dict(color='white', width=2)))
-                fig_pie.update_layout(
-                    title="Sentiment Distribution",
-                    font=dict(size=14),
-                    showlegend=True,
-                    height=400
+                fig_pie.update_layout(title="Sentiment Distribution", font=dict(size=14), showlegend=True, height=400
                 )
                 st.plotly_chart(fig_pie, use_container_width=True)
             
             with col2:
                 # Bar Chart
-                fig_bar = go.Figure(data=[
-                    go.Bar(name='Sentiment', x=labels, y=values, 
-                          marker_color=colors, text=values, textposition='auto')
-                ])
-                fig_bar.update_layout(
-                    title="Sentiment Count",
-                    xaxis_title="Sentiment",
-                    yaxis_title="Number of Reviews",
-                    height=400,
-                    showlegend=False
-                )
+                fig_bar = go.Figure(data=[go.Bar(name='Sentiment', x=labels, y=values, marker_color=colors, text=values, textposition='auto')])
+                fig_bar.update_layout(title="Sentiment Count", xaxis_title="Sentiment", yaxis_title="Number of Reviews", height=400, showlegend=False)
                 st.plotly_chart(fig_bar, use_container_width=True)
             
             # Percentage breakdown
@@ -462,8 +445,7 @@ elif page == "📁 CSV Analysis":
         st.subheader("📋 Detailed Results")
         
         # Filter options
-        sentiment_filter = st.selectbox("Filter by sentiment:", 
-                                      ['All', 'Positive', 'Negative', 'Unknown'])
+        sentiment_filter = st.selectbox("Filter by sentiment:", ['All', 'Positive', 'Negative', 'Unknown'])
         
         if sentiment_filter != 'All':
             filtered_df = results_df[results_df['sentiment'] == sentiment_filter.lower()]
@@ -474,9 +456,5 @@ elif page == "📁 CSV Analysis":
         
         # Download results
         csv = results_df.to_csv(index=False)
-        st.download_button(
-            label="📥 Download Results as CSV",
-            data=csv,
-            file_name="sentiment_analysis_results.csv",
-            mime="text/csv"
+        st.download_button(label="📥 Download Results as CSV", data=csv, file_name="sentiment_analysis_results.csv", mime="text/csv"
         )
