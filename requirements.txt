@@ -1,1 +1,10 @@
 streamlit
+joblib
+numpy
+scikit-learn
+nltk
+contractions
+pandas
+textblob   # only needed if you enable APPLY_SPELL_CORRECTION = True
+plotly
+chardet
